@@ -7,12 +7,26 @@ All the URLs that the page points/links to'''
 from bs4 import BeautifulSoup
 import sys
 import requests
-url=input("Enter the url")
-response=requests.get(url)
-# print(response.content)
-soup=BeautifulSoup(response.content,'html.parser')
-print("Page Title\n",soup.title.text)
-print("Page Body\n",soup.body.get_text(strip=True))
-print("\nAll URLs:")
-for link in soup.find_all('a',href=True):
+# to check whether you have passed the URL
+if len(sys.argv)!=2:
+  raise Exception("Usage: python fetch.py <URL>")
+# taking the second argument for URL
+url=sys.argv[1]
+# request the raw response
+raw_response=requests.get(url)
+# print(raw_response.content)
+# parsed soup
+parsed_soup=BeautifulSoup(raw_response.content,'html.parser')
+# title
+if parsed_soup.title:
+  print(parsed_soup.title.get_text(strip=True))
+else:
+  print()
+# body
+if parsed_soup.body:
+  print(parsed_soup.body.get_text(strip=True))
+else:
+  print()
+# All URLs
+for link in parsed_soup.find_all('a',href=True):
   print(link['href'])
