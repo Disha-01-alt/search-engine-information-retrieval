@@ -69,9 +69,15 @@ sim1=getSimhash(freq1)
 sim2=getSimhash(freq2)
 
 # count common bits
-xor=sim1^sim2
-dif=bin(xor).count('1')
-common=64-dif
+xorfunc=sim1^sim2
+dif = 0
+
+while xorfunc > 0:
+    if xorfunc % 2 == 1:
+        dif += 1
+    xorfunc = xorfunc // 2
+
+common = 64 - dif
 
 print("Simhash 1:",sim1)
 print("Simhash 2:",sim2)
